@@ -1,0 +1,8 @@
+<div>
+  <button phx-click="stop-audio">STOP!</button>
+</div>
+<section phx-update="ignore" id="canvas-root"></section>
+<audio
+  id="audio-root"
+  data-src="<%= @manifest_path %>"
+></audio>
