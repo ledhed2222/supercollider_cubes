@@ -1,12 +1,15 @@
 // Boots scsynth and creates a synth
 s.waitForBoot({
-  var message;
+  var message, bus;
+  bus = Bus.audio(s, 2);
   s.recHeaderFormat = "wav";
   s.recSampleFormat = "int16";
-  s.record("<%= recording_path %>", numChannels:2);
+  s.prepareForRecord("<%= recording_path %>", bus.numChannels);
+  s.sync;
+  s.record(bus:bus);
   ~synth = Synth.basicNew(\grains, s);
   message = ~synth.newMsg(s, \addToTail);
   SynthDef(\grains, { |out, freq=440, pan=0|
-    Out.ar(out, GrainSin.ar(2, Impulse.kr(10), 0.1, freq, pan, -1));
+    Out.ar(bus, GrainSin.ar(2, Impulse.kr(10), 0.1, freq, pan, -1));
   }).send(s, message);
 });
