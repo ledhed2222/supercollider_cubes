@@ -1,5 +1,6 @@
 defmodule SupercolliderCubes.AudioPipeline.Pipeline do
   use Membrane.Pipeline
+  use Membrane.Log
 
   @impl true
   def handle_init({input_path, output_path}) do

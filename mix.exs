@@ -52,6 +52,7 @@ defmodule SupercolliderCubes.MixProject do
       {:membrane_http_adaptive_stream_plugin, "~> 0.1.0"},
       {:membrane_mp4_plugin, "~> 0.3.0"},
       {:membrane_aac_plugin, "~> 0.5.1"},
+      {:membrane_loggers, "~> 0.3.0"},
     ]
   end
 

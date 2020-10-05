@@ -6,7 +6,7 @@ const AudioPlayer = (element) => {
     element.src = src;
     element.addEventListener('loadedmetadata', () => element.play());
   } else if (Hls.isSupported()) {
-    const hls = new Hls();
+    const hls = new Hls({debug: true});
     hls.loadSource(src);
     hls.attachMedia(element);
     hls.on(Hls.Events.MANIFEST_PARSED, () => element.play());
