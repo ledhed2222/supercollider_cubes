@@ -1,8 +1,28 @@
 <div>
-  <button phx-click="stop-audio">STOP!</button>
+  <button
+    <%= if !@audio_player_loaded || @muted, do: "disabled" %>
+    phx-click="stop-audio"
+  >
+    STOP!
+  </button>
+  <button
+    <%= if !@audio_player_loaded || !@muted, do: "disabled" %>
+    phx-click="start-audio"
+  >
+    START! 
+  </button>
 </div>
-<section phx-update="ignore" id="canvas-root"></section>
+<section
+   phx-hook="PhysicsCanvas"
+   phx-update="ignore"
+   id="canvas-root"
+>
+</section>
 <audio
-  id="audio-root"
-  data-src="<%= @manifest_path %>"
-></audio>
+   muted
+   autoplay
+   id="audio-root"
+   data-src="<%= @manifest_path %>"
+   phx-hook="AudioPlayer"
+>
+</audio>

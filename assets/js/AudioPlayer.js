@@ -1,16 +1,24 @@
 import Hls from 'hls.js';
 
-const AudioPlayer = (element) => {
-  const src = element.dataset.src;
-  if (element.canPlayType('application/vnd.apple.mpegurl')) {
-    element.src = src;
-    element.addEventListener('loadedmetadata', () => element.play());
-  } else if (Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(src);
-    hls.attachMedia(element);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => element.play());
-  }
-};
+export default class AudioPlayer {
+  mounted() {
+    this.handleEvent('started-audio', () => {
+      this.el.play();
+      this.el.muted = false;
+    });
 
-export default AudioPlayer;
+    this.handleEvent('stopped-audio', () => {
+      this.el.muted = true;
+    });
+
+    if (this.el.canPlayType('application/vnd.apple.mpegurl')) {
+      this.el.src = this.el.dataset.src;
+      this.el.addEventListener('loadedmetadata', () => this.pushEvent('audio-player-loaded'));
+    } else if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(this.el.dataset.src);
+      hls.attachMedia(this.el);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => this.pushEvent('audio-player-loaded')); 
+    }
+  }
+}

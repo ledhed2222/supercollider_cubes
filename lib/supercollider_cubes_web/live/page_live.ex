@@ -8,18 +8,32 @@ defmodule SupercolliderCubesWeb.PageLive do
     end) |> Path.join
     {:ok, assign(
       socket,
-      :manifest_path, manifest_path
+      manifest_path: manifest_path,
+      muted: true,
+      audio_player_loaded: false
     )}
   end
 
   @impl true
   def handle_event("stop-audio", _value, socket) do
-    ## TODO: can this be encapsulated
+    {:noreply, push_event(assign(socket, muted: true), "stopped-audio", %{})}
+  end
+
+  @impl true
+  def handle_event("start-audio", _value, socket) do
+    {:noreply, push_event(assign(socket, muted: false), "started-audio", %{})}
+  end
+
+  @impl true
+  def handle_event("audio-player-loaded", _value, socket) do
+    {:noreply, assign(socket, audio_player_loaded: true)}
+  end
+
+  @impl true
+  def handle_event("client-audio-update", %{"pos_x" => pos_x, "pos_y" => pos_y}, socket) do
     SupercolliderCubes.ScSynth.send_command(
       SupercolliderCubes.ScSynth,
-      """
-      ~synth.free;
-      """
+      "~synth.set(\"freq\", #{pos_x});"
     )
     {:noreply, socket}
   end
