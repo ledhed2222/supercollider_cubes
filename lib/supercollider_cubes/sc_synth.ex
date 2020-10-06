@@ -6,15 +6,13 @@ defmodule SupercolliderCubes.ScSynth do
 
   # Client
 
-  def start_link(recording_path) do
-    result = GenServer.start_link(__MODULE__, {:ok, recording_path}, name: __MODULE__)
+  def start_link do
+    result = GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
     case result do
       {:ok, pid} ->
-        send_command(pid, initialize_sc(recording_path))
-        {:ok, pid}
-      {:error, {:already_started, pid}} ->
-        {:ok, pid}
+        send_command(pid, initialize_sc())
     end
+    result
   end
 
   def send_command(pid, commands) when is_bitstring(commands) do
@@ -31,19 +29,23 @@ defmodule SupercolliderCubes.ScSynth do
       String.replace(~r/[\n\r\x{001c}]/, "")
   end
 
-  defp initialize_sc(recording_path) do
-    Path.join([__DIR__, "sc_synth", "initialize_sc.scd.eex"]) |>
-      EEx.eval_file(recording_path: recording_path)
+  defp initialize_sc do
+    result = Path.join([__DIR__, "sc_synth", "initialize_sc.scd"]) |> File.read
+    case result do
+      {:ok, body} ->
+        body
+      _ ->
+        result
+    end
   end
 
   # Server
 
   @impl true
-  def init({:ok, recording_path}) do
+  def init(:ok) do
     port = Port.open({:spawn, @command}, [:binary, :exit_status])
     Port.monitor(port)
     {:ok, %{
-      recording_path: recording_path,
       port: port,
       latest_output: nil,
       exit_status: nil,

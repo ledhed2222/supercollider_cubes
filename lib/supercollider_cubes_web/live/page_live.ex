@@ -19,7 +19,6 @@ defmodule SupercolliderCubesWeb.PageLive do
       SupercolliderCubes.ScSynth,
       """
       ~synth.free;
-      s.stopRecording;
       """
     )
     {:noreply, socket}

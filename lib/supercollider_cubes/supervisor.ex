@@ -1,8 +1,6 @@
 defmodule SupercolliderCubes.Supervisor do
   use Supervisor
 
-  @recording_path Path.join("priv/static/audio", "yo.wav")
-
   # Client
 
   def start_link(opts) do
@@ -14,11 +12,11 @@ defmodule SupercolliderCubes.Supervisor do
     children = [
       %{
         id: SupercolliderCubes.ScSynth,
-        start: {SupercolliderCubes.ScSynth, :start_link, [@recording_path]},
+        start: {SupercolliderCubes.ScSynth, :start_link, []},
       },
       %{
         id: SupercolliderCubes.AudioPipeline,
-        start: {SupercolliderCubes.AudioPipeline, :start_link, [@recording_path]},
+        start: {SupercolliderCubes.AudioPipeline, :start_link, []},
       },
     ]
 

@@ -3,8 +3,8 @@ defmodule SupercolliderCubes.AudioPipeline do
 
   # Client
 
-  def start_link(recording_path) do
-    GenServer.start_link(__MODULE__, {:ok, recording_path}, name: __MODULE__)
+  def start_link do
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def manifest_path(pid) do
@@ -14,18 +14,14 @@ defmodule SupercolliderCubes.AudioPipeline do
   # Server
   
   @impl true
-  def init({:ok, recording_path}) do
+  def init(:ok) do
     manifest_path = output_path()
-    {:ok, pid} = SupercolliderCubes.AudioPipeline.Pipeline.start_link({
-      recording_path,
-      manifest_path,
+    {:ok, pid} = SupercolliderCubes.AudioPipeline.Pipeline.start_link(%{
+      output_path: manifest_path,
     })
-    wait_for_input(recording_path, fn ->
-      Membrane.Pipeline.play(pid)
-    end)
+    Membrane.Pipeline.play(pid)
     {:ok, %{
       pipeline_pid: pid,
-      recording_path: recording_path,
       manifest_path: manifest_path <> ".m3u8",
     }}
   end
@@ -37,15 +33,5 @@ defmodule SupercolliderCubes.AudioPipeline do
 
   defp output_path do
     Path.join("priv/static/audio", Integer.to_string(:rand.uniform(4294967296), 32))
-  end
-
-  defp wait_for_input(recording_path, then) do
-    case recording_path |> File.exists? do
-      true ->
-        then.()
-      false ->
-        Process.sleep(250)
-        wait_for_input(recording_path, then)
-    end
   end
 end

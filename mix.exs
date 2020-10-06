@@ -47,7 +47,7 @@ defmodule SupercolliderCubes.MixProject do
       {:plug_cowboy, "~> 2.0"},
       # addl deps
       {:membrane_core, "~> 0.5.0"},
-      {:membrane_element_file, "~> 0.3.0"},
+      {:membrane_element_portaudio, "~> 0.3.1"},
       {:membrane_element_fdk_aac, "~> 0.2.1"},
       {:membrane_http_adaptive_stream_plugin, "~> 0.1.0"},
       {:membrane_mp4_plugin, "~> 0.3.0"},

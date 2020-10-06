@@ -3,9 +3,11 @@ defmodule SupercolliderCubes.AudioPipeline.Pipeline do
   use Membrane.Log
 
   @impl true
-  def handle_init({input_path, output_path}) do
+  def handle_init(%{output_path: output_path}) do
     children = %{
-      file: %Membrane.Element.File.Source{location: input_path},
+      stream: %Membrane.Element.PortAudio.Source{
+        endpoint_id: 3,
+      },
       encoder: %Membrane.Element.FDK.AAC.Encoder{
         input_caps: %Membrane.Caps.Audio.Raw{
           channels: 2,
@@ -28,7 +30,7 @@ defmodule SupercolliderCubes.AudioPipeline.Pipeline do
     }
 
     links = [
-      link(:file) |>
+      link(:stream) |>
       to(:encoder) |>
       to(:parser) |>
       to(:payloader) |>
