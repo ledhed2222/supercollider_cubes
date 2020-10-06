@@ -10,10 +10,6 @@ defmodule SupercolliderCubesWeb.Endpoint do
     signing_salt: "TFdMq6Ww"
   ]
 
-  socket "/socket", SupercolliderCubesWeb.UserSocket,
-    websocket: true,
-    longpoll: false
-
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
