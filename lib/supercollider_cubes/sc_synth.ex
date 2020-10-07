@@ -2,7 +2,7 @@ defmodule SupercolliderCubes.ScSynth do
   use GenServer
   require Logger
 
-  @command "bin/supercollider_start.sh"
+  @command Application.fetch_env!(:supercollider_cubes, :sclang_path)
 
   # Client
 

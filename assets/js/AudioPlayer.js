@@ -1,5 +1,7 @@
 import Hls from 'hls.js';
 
+// yes, this is ugly js, but phoenix liveview wants an object with callbacks
+// and i'm committed to using liveview in this app as an experiment :)
 export default class AudioPlayer {
   mounted() {
     this.handleEvent('started-audio', () => {

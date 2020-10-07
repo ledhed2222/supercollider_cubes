@@ -2,31 +2,34 @@ import Matter from 'matter-js';
 
 const WIDTH = 800;
 const HEIGHT = 800;
+const RENDER_OPTIONS = {
+  width: WIDTH,
+  height: HEIGHT,
+  wireframes: false,
+};
+const ENGINE = Matter.Engine.create();
+ENGINE.world.gravity = {
+  x: 0,
+  y: 0.1,
+};
 
+// yes, this is ugly js, but phoenix liveview wants an object with callbacks
+// and i'm committed to using liveview in this app as an experiment :)
 export default class PhysicsCanvas {
   mounted() {
-    const engine = Matter.Engine.create();
-    engine.world.gravity = {
-      x: 0,
-      y: 0.1,
-    };
     const render = Matter.Render.create({
-      engine,
+      engine: ENGINE,
       element: this.el,
-      options: {
-        width: WIDTH,
-        height: HEIGHT,
-        wireframes: false,
-      },
+      options: RENDER_OPTIONS,
     });
-
     Matter.Render.run(render);
+
     const runner = Matter.Runner.create();
-    Matter.Runner.run(runner, engine);
+    Matter.Runner.run(runner, ENGINE);
 
     const mouse = Matter.Mouse.create(render.canvas);
-    const mouseConstraint = Matter.MouseConstraint.create(engine, { mouse });
-    Matter.World.add(engine.world, mouseConstraint);
+    const mouseConstraint = Matter.MouseConstraint.create(ENGINE, { mouse });
+    Matter.World.add(ENGINE.world, mouseConstraint);
     Matter.Events.on(mouseConstraint, 'mousedown', (event) => {
       const body = Matter.Bodies.rectangle(
         event.mouse.position.x,
@@ -39,7 +42,7 @@ export default class PhysicsCanvas {
         pos_x: body.position.x,
         pos_y: body.position.y,
       });
-      Matter.World.add(engine.world, body);
+      Matter.World.add(ENGINE.world, body);
     });
   }
 }
