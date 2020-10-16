@@ -12,18 +12,23 @@ defmodule SupercolliderCubes.AudioPipeline do
   end
 
   # Server
-  
+
   @impl true
   def init(:ok) do
     manifest_path = output_path()
-    {:ok, pid} = SupercolliderCubes.AudioPipeline.Pipeline.start_link(%{
-      output_path: manifest_path,
-    })
+
+    {:ok, pid} =
+      SupercolliderCubes.AudioPipeline.Pipeline.start_link(%{
+        output_path: manifest_path
+      })
+
     Membrane.Pipeline.play(pid)
-    {:ok, %{
-      pipeline_pid: pid,
-      manifest_path: manifest_path <> ".m3u8",
-    }}
+
+    {:ok,
+     %{
+       pipeline_pid: pid,
+       manifest_path: manifest_path <> ".m3u8"
+     }}
   end
 
   @impl true
@@ -32,6 +37,6 @@ defmodule SupercolliderCubes.AudioPipeline do
   end
 
   defp output_path do
-    Path.join("priv/static/audio", Integer.to_string(:rand.uniform(4294967296), 32))
+    Path.join("priv/static/audio", Integer.to_string(:rand.uniform(4_294_967_296), 32))
   end
 end

@@ -14,7 +14,7 @@ defmodule SupercolliderCubes.Application do
       # Start the Endpoint (http/https)
       SupercolliderCubesWeb.Endpoint,
       # scsynth external OS process
-      SupercolliderCubes.Supervisor,
+      SupercolliderCubes.Supervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

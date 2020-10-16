@@ -30,7 +30,7 @@ config :membrane_core, Membrane.Logger,
       id: :console,
       level: :warn,
       options: [],
-      tags: [:all],
+      tags: [:all]
     }
   ],
   level: :warn

@@ -3,15 +3,21 @@ defmodule SupercolliderCubesWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    manifest_path = SupercolliderCubes.AudioPipeline.manifest_path(SupercolliderCubes.AudioPipeline) |> Path.split |> Enum.reject(fn piece ->
-      ["priv", "static"] |> Enum.member?(piece)
-    end) |> Path.join
-    {:ok, assign(
-      socket,
-      manifest_path: manifest_path,
-      muted: true,
-      audio_player_loaded: false
-    )}
+    manifest_path =
+      SupercolliderCubes.AudioPipeline.manifest_path(SupercolliderCubes.AudioPipeline)
+      |> Path.split()
+      |> Enum.reject(fn piece ->
+        ["priv", "static"] |> Enum.member?(piece)
+      end)
+      |> Path.join()
+
+    {:ok,
+     assign(
+       socket,
+       manifest_path: manifest_path,
+       muted: true,
+       audio_player_loaded: false
+     )}
   end
 
   @impl true
@@ -35,6 +41,7 @@ defmodule SupercolliderCubesWeb.PageLive do
       SupercolliderCubes.ScSynth,
       "~synth.set(\"freq\", #{pos_x});"
     )
+
     {:noreply, socket}
   end
 end

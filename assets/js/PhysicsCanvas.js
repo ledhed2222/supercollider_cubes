@@ -12,6 +12,7 @@ ENGINE.world.gravity = {
   x: 0,
   y: 0.1,
 };
+const RUNNER = Matter.Runner.create();
 
 // yes, this is ugly js, but phoenix liveview wants an object with callbacks
 // and i'm committed to using liveview in this app as an experiment :)
@@ -24,8 +25,7 @@ export default class PhysicsCanvas {
     });
     Matter.Render.run(render);
 
-    const runner = Matter.Runner.create();
-    Matter.Runner.run(runner, ENGINE);
+    Matter.Runner.run(RUNNER, ENGINE);
 
     const mouse = Matter.Mouse.create(render.canvas);
     const mouseConstraint = Matter.MouseConstraint.create(ENGINE, { mouse });

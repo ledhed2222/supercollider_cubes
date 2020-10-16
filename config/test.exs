@@ -8,3 +8,6 @@ config :supercollider_cubes, SupercolliderCubesWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :supercollider_cubes,
+  sclang_path: "sclang"
